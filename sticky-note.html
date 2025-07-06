@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sticky Note</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .cake-container {
+      position: relative;
+      width: 500px;
+      margin: 60px auto 0 auto;
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .cake-img {
+      width: 400px;
+      z-index: 1;
+    }
+    .flame {
+      position: absolute;
+      width: 32px;
+      height: 48px;
+      transition: left 0.2s, top 0.2s;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .candle {
+      position: absolute;
+      width: auto;
+      height: 80px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .happy-birthday {
+      display: none;
+      text-align: center;
+      font-size: 2.5em;
+      color: #e76192;
+      margin-top: 40px;
+      font-family: 'Bagel Fat One', sans-serif;
+      text-shadow: 2px 2px 4px rgba(227, 141, 115, 0.5);
+      animation: fadeIn 1s;
+    }
+    .show-message {
+      display: block;
+    }
+    .blow-message {
+      text-align: center;
+      font-size: 2em;
+      color: #e7a23b;
+      margin-bottom: -90px;
+      font-family: 'Bagel Fat One', sans-serif;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <div class="blow-message">Blow your candles, use your pointer!</div>
+    <div class="cake-container" id="cake-container">
+      <img src="images/cake.png" alt="Cake" class="cake-img">
+      <!-- Flames will be added by JS -->
+    </div>
+    <div class="happy-birthday" id="happy-birthday">🎉 Happy Birthday! 🎉</div>
+    <a href="index.html">← Back to Desk</a>
+  </div>
+  <script>
+    // --- CONFIG ---
+    const flamePositions = [
+      { left: 115, top: 50 },
+      { left: 175, top: 50 },
+      { left: 235, top: 50 },
+      { left: 295, top: 50 },
+      { left: 355, top: 50 }
+    ];
+    // ---------------
+
+    const cakeContainer = document.getElementById('cake-container');
+    const happyMsg = document.getElementById('happy-birthday');
+    let flames = [];
+
+    // Create flames and candles
+    flamePositions.forEach((pos, i) => {
+      // Candle (just below the flame)
+      const candle = document.createElement('img');
+      candle.src = 'images/candle.png';
+      candle.className = 'candle';
+      candle.style.left = (pos.left - 22) + 'px'; // Center candle under flame
+      candle.style.top = (pos.top + 43) + 'px';  // Adjust as needed for your images
+      cakeContainer.appendChild(candle);
+
+      // Flame
+      const flame = document.createElement('img');
+      flame.src = 'images/flame.png';
+      flame.className = 'flame';
+      flame.style.left = pos.left + 'px';
+      flame.style.top = pos.top + 'px';
+      flame.dataset.out = 'false';
+      cakeContainer.appendChild(flame);
+      flames.push(flame);
+    });
+
+    // Move flames away from cursor
+    cakeContainer.addEventListener('mousemove', (e) => {
+      const rect = cakeContainer.getBoundingClientRect();
+      flames.forEach(flame => {
+        if (flame.dataset.out === 'true') return;
+        const fx = flame.offsetLeft + 16; // center of flame
+        const fy = flame.offsetTop + 24;
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        const dx = fx - mx;
+        const dy = fy - my;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 80) {
+          // Move flame away from cursor
+          let newLeft = flame.offsetLeft + (dx / dist) * 80;
+          let newTop = flame.offsetTop + (dy / dist) * 80;
+          // If out of bounds, mark as out and hide
+          if (
+            newLeft < -40 || newLeft > rect.width ||
+            newTop < -60 || newTop > rect.height
+          ) {
+            flame.style.display = 'none';
+            flame.dataset.out = 'true';
+          } else {
+            flame.style.left = newLeft + 'px';
+            flame.style.top = newTop + 'px';
+          }
+        }
+      });
+      // Check if all flames are out
+      if (flames.every(f => f.dataset.out === 'true')) {
+        happyMsg.classList.add('show-message');
+      }
+    });
+  </script>
+</body>
+</html>

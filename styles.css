@@ -1,0 +1,262 @@
+body {
+  font-family: "Verdana", sans-serif;
+  background: url('images/desk.png') no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.desk {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-content h1 {
+  font-family: 'Bagel Fat One', cursive;
+  font-size: 4.5em;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(227, 141, 115, 0.5);
+  animation: fadeIn 0.5s ease-in;
+  text-align: center;
+  margin-bottom: 0.3em;
+}
+
+.center-content p {
+  font-size: 1.5em;
+  color: #fff;
+  text-align: center;
+  margin-top: 0;
+  text-shadow: 2px 2px 4px rgba(131, 53, 29, 0.5); /* Added shadow */
+}
+
+.items {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  margin: 0 auto;
+}
+
+.item {
+  position: absolute;
+  transition: transform 0.3s;
+}
+
+.item img {
+  width: 120px;
+  height: auto;
+}
+
+.item span {
+  display: block;
+  font-family: "Verdana", sans-serif;
+  color: #d2658d;
+  font-size: 1.1em;
+  margin-top: 5px;
+}
+
+.item:hover {
+  transform: scale(1.1);
+}
+
+.pencilcase {
+  top: -190px;
+  left: -470px;
+  transform: rotate(15deg);
+}
+
+.pencilcase img {
+  width: 400px;
+  height: auto;
+}
+
+.notebook {
+  top: 130px;
+  left: 580px;
+  transform: rotate(-20deg);
+}
+
+.notebook img {
+  width: 430px;
+  height: auto;
+}
+
+.envelope {
+  top: 150px;
+  left: -400px;
+  transform: rotate(-20deg);
+}
+
+.envelope img {
+  width: 450px;
+  height: auto;
+}
+
+.sketchbook {
+  top: 80px;
+  left: 180px;
+  transform: rotate(-10deg);
+}
+
+.sketchbook img {
+  width: 320px;
+  height: auto;
+}
+
+.sticky-note {
+  top: -200px;
+  left: 700px;
+  transform: rotate(10deg);
+}
+
+.sticky-note img {
+  width: 250px;
+  height: auto;
+}
+
+.strawberry {
+  top: 0px;      /* Adjust as you like */
+  left: 50px;    /* Adjust as you like */
+  transform: rotate(-20deg);
+}
+
+.strawberry img {
+  width: 210px;   /* Adjust as you like */
+  height: auto;
+}
+
+.paperboat {
+  top: -190px;
+  left: -470px;
+  transform: rotate(15deg);
+}
+
+.paperboat img {
+  width: 400px;
+  height: auto;
+}
+
+.fountain-pen {
+  top: 80px;
+  left: 180px;
+  transform: rotate(-10deg);
+}
+
+.fountain-pen img {
+  width: 320px;
+  height: auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#main-title {
+  opacity: 1;
+  /* Remove animation here */
+}
+
+#main-title.fade-in {
+  animation: fadeIn 0.3s ease-in; /* Changed from 2s to 0.7s for a faster fade-in */
+}
+
+@keyframes spill {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(5px, 5px); }
+  100% { transform: translate(0, 0); }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* Center children horizontally */
+  justify-content: center;
+  margin: 40px auto;
+  max-width: 1200px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.section h2 {
+  font-family: "Verdana", sans-serif;
+  color: #e76192;
+  font-size: 2.5em;
+}
+
+button {
+  padding: 12px 24px;
+  background: #ff6ea3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #b71c1c;
+}
+
+/* Infinite Photo Carousel */
+.carousel,
+.scrollable-carousel {
+  width: 1200px;      /* Increase from 1000px */
+  max-width: 100vw;
+  min-width: 320px;
+  height: 400px;      /* Increase from 340px */
+  margin: 40px auto;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  background: #fff;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+
+.carousel__track {
+  display: flex;
+  width: max-content;
+}
+
+.carousel__track img {
+  width: 380px;       /* Increase from 320px */
+  height: 360px;      /* Increase from 300px */
+  object-fit: cover;
+  margin-right: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  user-select: none;
+  pointer-events: auto;
+}
+
+.carousel__track video {
+  width: 380px;
+  height: 360px;
+  object-fit: cover;
+  margin-right: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  user-select: none;
+  pointer-events: auto;
+}

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mia's Oracle</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background: url('images/skystars.jpg') center center/cover no-repeat, #f8f6f2;;
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+    }
+    .oracle-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+    }
+    .oracle-title {
+      font-size: 2.2em;
+      color: #b97a56;
+      margin-top: 40px;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+    .oracle-instructions {
+      color: #7a5c2e;
+      background: #fffbe9;
+      padding: 10px 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      font-size: 1.1em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      text-align: center;
+      max-width: 400px;
+    }
+    .oracle-image-wrapper {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+      z-index: 1;
+    }
+    .oracle-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      z-index: 1;
+      user-select: none;
+      pointer-events: none;
+    }
+    .oracle-glass {
+      pointer-events: none;
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border-radius: 50%;
+      z-index: 2;
+      /* Glassy white sheen */
+      background:
+        radial-gradient(ellipse at 60% 30%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.15) 40%, rgba(255,255,255,0.05) 70%, transparent 100%),
+        linear-gradient(120deg, rgba(255,255,255,0.18) 30%, transparent 80%);
+      box-shadow:
+        0 0 32px 8px rgba(255,255,255,0.12) inset,
+        0 2px 16px 0 rgba(255,255,255,0.08) inset;
+    }
+    .oracle-tint {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30, 30, 30, 0);
+      z-index: 10;
+      pointer-events: none;
+      transition: background 0.3s;
+    }
+    .oracle-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fffbe9;
+      color: #7a5c2e;
+      border-radius: 24px;
+      padding: 48px 56px;
+      font-size: 2em;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      z-index: 20;
+      min-width: 320px;
+      max-width: 600px;
+      text-align: center;
+      display: none;
+      animation: fadeIn 0.8s;
+      /* Add this for the close button */
+      box-sizing: border-box;
+      padding-top: 56px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%);}
+      to { opacity: 1; transform: translate(-50%, -50%);}
+    }
+    .back-link {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 30;
+      background: #fffbe9;
+      color: #b97a56;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .back-link:hover {
+      background: #ffe4b5;
+    }
+    .oracle-close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      font-size: 2em;
+      color: #b97a56;
+      cursor: pointer;
+      font-weight: bold;
+      z-index: 1;
+      user-select: none;
+      transition: color 0.2s;
+    }
+    .oracle-close:hover {
+      color: #d44;
+    }
+  </style>
+</head>
+<body>
+  <div class="oracle-tint" id="oracle-tint"></div>
+  <div class="oracle-message" id="oracle-message">
+    <span class="oracle-close" id="oracle-close" title="Close">&times;</span>
+    <!-- The message text will be inserted here by JS -->
+  </div>
+  <div class="oracle-container">
+    <div class="oracle-title">Mia's Oracle</div>
+    <div class="oracle-instructions">
+      Gently polish the oracle by clicking and moving your mouse or finger back and forth over the glass ball.<br>
+      When the vision is clear, your message will appear! Do it a few times, there's a bunch of predictions (12 to be exact)
+    </div>
+    <div class="oracle-image-wrapper" id="oracle-area">
+      <img src="images/photo14.JPG" alt="Oracle" class="oracle-image" draggable="false">
+      <div class="oracle-glass"></div>
+    </div>
+    <a href="index.html" class="back-link">← Back to Desk</a>
+  </div>
+  <script>
+    // 100 example messages
+    const oracleMessages = [
+        "Someone is thinking about you. They’re slightly concerned.",
+        "Someone will overshare with you. Act wise.",
+        "You’ll sense a shift. It’s probably indigestion.",
+        "Don’t look for signs. They’re tired of being misread.",
+        "Mercury isn’t even in retrograde. This one’s on you.",
+        "A dumb little walk will fix 12% of it.",
+        "Progress is happening, just very slowly and with poor lighting.",
+        "A small object will fall. You’ll stare at it for a while.",
+        "Your opinion will be asked, then politely ignored.",
+        "A man will speak. Ignore him.",
+        "You're not toxic. You're delicious and unregulated.",
+        "Sex will be offered. Consider the source. Then maybe."
+    ];
+    // Fill up to 100 messages for demo
+    while (oracleMessages.length < 100) {
+      oracleMessages.push("The universe is listening. (" + (oracleMessages.length+1) + ")");
+    }
+
+    const oracleArea = document.getElementById('oracle-area');
+    const oracleTint = document.getElementById('oracle-tint');
+    const oracleMessage = document.getElementById('oracle-message');
+
+    let polishProgress = 0;
+    let lastX = null, lastY = null;
+    let tintLevel = 0; // Start with no tint
+    let revealed = false;
+
+    function updateTint() {
+      oracleTint.style.background = `rgba(30,30,30,${tintLevel})`;
+    }
+
+    function showMessage() {
+      // Only pick from the first 12 (your custom messages)
+      const msg = oracleMessages[Math.floor(Math.random() * 12)];
+      oracleMessage.innerHTML = `<span class="oracle-close" id="oracle-close" title="Close">&times;</span>${msg}`;
+      oracleMessage.style.display = 'block';
+      document.getElementById('oracle-close').onclick = resetOracle;
+    }
+
+    function resetOracle() {
+      polishProgress = 0;
+      tintLevel = 0;
+      revealed = false;
+      updateTint();
+      oracleMessage.style.display = 'none';
+    }
+
+    function handlePolish(x, y) {
+      if (revealed) return;
+      if (lastX !== null && lastY !== null) {
+        const dx = x - lastX;
+        const dy = y - lastY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        // Only count if movement is significant
+        if (dist > 2) {
+          polishProgress += dist;
+          // Increase tint as user polishes
+          tintLevel = Math.min(0.7, polishProgress / 400);
+          updateTint();
+          if (tintLevel >= 0.7) {
+            revealed = true;
+            oracleTint.style.background = 'rgba(30,30,30,0.5)';
+            setTimeout(showMessage, 400);
+          }
+        }
+      }
+      lastX = x;
+      lastY = y;
+    }
+
+    // Mouse events
+    oracleArea.addEventListener('mousedown', e => {
+      lastX = e.offsetX;
+      lastY = e.offsetY;
+      function onMove(ev) {
+        handlePolish(ev.offsetX, ev.offsetY);
+      }
+      function onUp() {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        lastX = null; lastY = null;
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+
+    // Touch events
+    oracleArea.addEventListener('touchstart', e => {
+      if (e.touches.length !== 1) return;
+      const rect = oracleArea.getBoundingClientRect();
+      lastX = e.touches[0].clientX - rect.left;
+      lastY = e.touches[0].clientY - rect.top;
+      function onMove(ev) {
+        if (ev.touches.length !== 1) return;
+        const rect = oracleArea.getBoundingClientRect();
+        handlePolish(ev.touches[0].clientX - rect.left, ev.touches[0].clientY - rect.top);
+      }
+      function onUp() {
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onUp);
+        lastX = null; lastY = null;
+      }
+      document.addEventListener('touchmove', onMove);
+      document.addEventListener('touchend', onUp);
+    });
+
+    // Reset oracle when tint or message is clicked after reveal
+    function globalResetHandler() {
+      if (revealed) resetOracle();
+    }
+    oracleTint.addEventListener('click', globalResetHandler);
+    oracleMessage.addEventListener('click', globalResetHandler);
+    document.body.addEventListener('click', function(e) {
+      if (revealed && !oracleArea.contains(e.target)) {
+        resetOracle();
+      }
+    });
+
+    // Initial state
+    updateTint();
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Strawberry</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="section">
+    <h2>Strawberry Time Capsule</h2>
+    <div id="capsule-locked" style="text-align:center; margin:32px 0;">
+      <div style="font-size:3em; margin-bottom:8px;">🔒</div>
+      <div style="font-size:1.2em; color:#b97a56; margin-bottom:10px;">
+        This time capsule is locked.<br>
+        <span style="font-size:0.95em; color:#b97a56;">Come back in a year to see what’s inside!</span>
+      </div>
+      <div id="countdown" style="font-size:1.5em; color:#e76192; margin-bottom:0;"></div>
+    </div>
+    <div id="capsule-content" style="display:none; text-align:center;">
+      <!-- You can add your secret content here in the future! -->
+      <p>The time capsule is now open! 🎉</p>
+    </div>
+    <a href="index.html">← Back to Desk</a>
+  </div>
+  <script>
+    // Set the unlock date (July 6, 2026)
+    const unlockDate = new Date('2026-07-06T00:00:00');
+    const countdownEl = document.getElementById('countdown');
+    const capsuleContent = document.getElementById('capsule-content');
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = unlockDate - now;
+      if (diff <= 0) {
+        countdownEl.style.display = 'none';
+        capsuleContent.style.display = 'block';
+      } else {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        countdownEl.textContent = 
+          `Time capsule opens in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
